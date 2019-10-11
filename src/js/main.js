@@ -1,23 +1,41 @@
-/**
-*   Declare the App
-*/
+'use strict';
+
 class App {
-    constructor(document, window) {
-        this.doc = document;
-        this.win = window;
+    constructor() {
+        this.$doc = $(document);
+        this.$win = $(window);
+        this.$body = $('body');
+        this.classes = {
+            visible: 'visible',
+            open: 'open',
+            animated: 'animated',
+            current: 'current',
+            active: 'active'
+        };
+        this.breakpoints = {
+            desktop: 1200,
+            tablet: 1024,
+            mobile: 768
+        };
+        this.sliders = [
+            {
+                $container: $('.slider'),
+                $slides: $('.slider__slides'),
+                settings: {},
+                arrowControls: {
+                    status: false,
+                    $element: $('.none')
+                },
+                dotControls: {
+                    status: false,
+                    $element: $('.none')
+                },
+                htmlSlides: false
+            }
+        ];
 
-        this.log();
-    };
-
-    /**
-    *   App Methods   
-    */    
-    log() {
-        console.log('msg');
-    };
+        // this.method();
+    };    
 };
 
-/**
-*   Start the App
-*/
-const application = new App(document, window);
+new App();
