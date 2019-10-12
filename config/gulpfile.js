@@ -24,7 +24,8 @@ gulp.task('sass', () => {
 			.pipe(sass().on('error', sass.logError))
 			.pipe(gulp.dest(`${paths.build}/assets/css`))
 			.pipe(browserSync.stream());
-});			
+});
+			
 
 /**
 *	Autoprefixer
@@ -65,6 +66,7 @@ gulp.task('watch', () => {
 
 	gulp.watch(`${paths.src}/scss/**/*.scss`, ['sass']);
 	gulp.watch(`${paths.build}/assets/css/style.css`, ['autoprefix']);
+	gulp.watch(`${paths.src}/images/**/*`, ['copy-images']);
 	gulp
 		.watch(`${paths.build}/*.html`)
 			.on('change', browserSync.reload);
@@ -95,3 +97,4 @@ gulp.task('minify', () => {
 gulp.task('build', () => {
 	sequence('sass', 'autoprefix', 'webpack');
 });
+
