@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "gulp watch --gulpfile config/gulpfile.js",
+    "start": "gulp build --gulpfile config/gulpfile.js && gulp watch --gulpfile config/gulpfile.js",
     "build": "gulp build --gulpfile config/gulpfile.js",
     "minify": "gulp minify --gulpfile config/gulpfile.js"
   },

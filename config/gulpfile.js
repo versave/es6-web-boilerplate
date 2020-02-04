@@ -50,9 +50,7 @@ gulp.task('webpack', () => {
 /**
 *	Watch Task
 */
-gulp.task('watch', async () => {
-	gulp.series('sass', 'autoprefix', 'webpack');
-	
+gulp.task('watch', () => {
 	browserSync.init({
 		server: {
 			baseDir: `${paths.build}`,
@@ -89,9 +87,7 @@ gulp.task('minify', async () => {
 });
 
 /**
-*	Build Task`
+*	Build Task
 */
-gulp.task('build', async () => {
-	await gulp.series('sass', 'autoprefix', 'webpack');
-});
+gulp.task('build', gulp.series('sass', 'autoprefix', 'webpack'));
 
