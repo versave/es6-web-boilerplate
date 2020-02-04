@@ -1,6 +1,5 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass');
-const gulpWait = require('gulp-wait');
 const browserSync = require('browser-sync').create();
 const cssnano = require('gulp-cssnano');
 const autoprefixer = require('gulp-autoprefixer');
@@ -18,7 +17,6 @@ const paths = {
 gulp.task('sass', () => {
 	return gulp
 		.src(`${paths.src}/scss/style.scss`)
-			.pipe(gulpWait(200))
 			.pipe(sass().on('error', sass.logError))
 			.pipe(gulp.dest(`${paths.build}/assets/css`))
 			.pipe(browserSync.stream());
@@ -28,8 +26,8 @@ gulp.task('sass', () => {
 /**
 *	Autoprefixer
 */
-gulp.task('autoprefix', () => {
-	gulp
+gulp.task('autoprefix', async () => {
+	await gulp
 		.src(`${paths.build}/assets/css/style.css`)
 			.pipe(autoprefixer({
 				browsers: ['last 2 versions'],
@@ -53,7 +51,7 @@ gulp.task('webpack', () => {
 *	Watch Task
 */
 gulp.task('watch', async () => {
-	await gulp.series('sass', 'autoprefix', 'webpack');
+	gulp.series('sass', 'autoprefix', 'webpack');
 	
 	browserSync.init({
 		server: {
@@ -62,14 +60,16 @@ gulp.task('watch', async () => {
 		}
 	});
 
-	gulp.watch(`${paths.src}/scss/**/*.scss`, gulp.series('sass'));
-	gulp.watch(`${paths.build}/assets/css/style.css`, gulp.series('autoprefix'));
+	gulp.watch(`${paths.src}/scss/**/*.scss`, gulp.series('sass', 'autoprefix'));
+	
 	gulp
 		.watch(`${paths.build}/*.html`)
 			.on('change', browserSync.reload);
+
 	gulp
 		.watch(`${paths.src}/js/**/*.js`)
 			.on('change', browserSync.reload);
+	
 	gulp.watch(`${paths.src}/js/**/*.js`, gulp.series('webpack'));
 });
 
