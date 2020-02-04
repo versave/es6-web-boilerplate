@@ -4,7 +4,6 @@ const gulpWait = require('gulp-wait');
 const browserSync = require('browser-sync').create();
 const cssnano = require('gulp-cssnano');
 const autoprefixer = require('gulp-autoprefixer');
-const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 const webpackConfig = require('./webpack.config.js');
 const uglify = require('gulp-uglify');
@@ -53,8 +52,8 @@ gulp.task('webpack', () => {
 /**
 *	Watch Task
 */
-gulp.task('watch', () => {
-	gulp.series('sass', 'autoprefix', 'webpack');
+gulp.task('watch', async () => {
+	await gulp.series('sass', 'autoprefix', 'webpack');
 	
 	browserSync.init({
 		server: {
@@ -77,12 +76,12 @@ gulp.task('watch', () => {
 /**
 *	Minifying Task`
 */
-gulp.task('minify', () => {
-	gulp
+gulp.task('minify', async () => {
+	await gulp
 		.src(`${paths.build}/assets/css/style.css`)
 			.pipe(cssnano())
 			.pipe(gulp.dest(`${paths.build}/assets/css`));		
-	gulp
+	await gulp
 		.src(`${paths.build}/assets/js/bundle.js`)
 			.pipe(uglify())
 			.pipe(gulp.dest(`${paths.build}/assets/js/`));
@@ -92,7 +91,7 @@ gulp.task('minify', () => {
 /**
 *	Build Task`
 */
-gulp.task('build', () => {
-	gulp.series('sass', 'autoprefix', 'webpack');
+gulp.task('build', async () => {
+	await gulp.series('sass', 'autoprefix', 'webpack');
 });
 
