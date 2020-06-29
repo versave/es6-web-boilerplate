@@ -61,10 +61,27 @@ gulp.task('watch', () => {
 		}
 	});
 
+	// Auto import SCSS
+	handleScss();
+
+	// Other watch tasks
+	gulp.watch(`${paths.src}/scss/**/*.scss`, gulp.series('sass', 'autoprefix'));
+	
+	gulp
+		.watch(`${paths.build}/*.html`)
+			.on('change', browserSync.reload);
+
+	gulp
+		.watch(`${paths.src}/js/**/*.js`)
+			.on('change', browserSync.reload);
+	
+	gulp.watch(`${paths.src}/js/**/*.js`, gulp.series('webpack'));
+});
+
+const handleScss = () => {
 	const watcher = chokidar.watch(`${paths.src}/scss/partials`, {ignoreInitial: true});
 	const styleScss = `${paths.src}/scss/style.scss`;
 
-	// Auto import SCSS
 	watcher
 		.on('add', (filePath) => {
 			const fileName = filePath.split('partials\\')[1];
@@ -88,20 +105,7 @@ gulp.task('watch', () => {
 				console.log(e)
 			}
 		});
-
-	// Other watch tasks
-	gulp.watch(`${paths.src}/scss/**/*.scss`, gulp.series('sass', 'autoprefix'));
-	
-	gulp
-		.watch(`${paths.build}/*.html`)
-			.on('change', browserSync.reload);
-
-	gulp
-		.watch(`${paths.src}/js/**/*.js`)
-			.on('change', browserSync.reload);
-	
-	gulp.watch(`${paths.src}/js/**/*.js`, gulp.series('webpack'));
-});
+};
 
 /**
 *	Minifying Task`
