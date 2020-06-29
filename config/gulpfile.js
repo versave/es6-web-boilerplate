@@ -64,6 +64,7 @@ gulp.task('watch', () => {
 	const watcher = chokidar.watch(`${paths.src}/scss/partials`, {ignoreInitial: true});
 	const styleScss = `${paths.src}/scss/style.scss`;
 
+	// Auto import SCSS
 	watcher
 		.on('add', (filePath) => {
 			const fileName = filePath.split('partials\\')[1];
@@ -73,9 +74,9 @@ gulp.task('watch', () => {
 			});
 		})
 		.on('unlink', (filePath) => {
+			const fileName = filePath.split('partials\\')[1];
+			
 			try {
-				const fileName = filePath.split('partials\\')[1];
-
 				const data = fs.readFileSync(styleScss, 'utf-8');
 				const fileLine = `@import './partials/${fileName}';`;
 
@@ -86,8 +87,9 @@ gulp.task('watch', () => {
 			} catch(e) {
 				console.log(e)
 			}
-		})
+		});
 
+	// Other watch tasks
 	gulp.watch(`${paths.src}/scss/**/*.scss`, gulp.series('sass', 'autoprefix'));
 	
 	gulp
