@@ -11,6 +11,7 @@
   "author": "Vasil Zhivkov",
   "description": "",
   "dependencies": {
+    "chokidar": "^3.4.0",
     "del": "^5.1.0",
     "delete-empty": "^3.0.0",
     "globby": "^10.0.1"
@@ -27,7 +28,7 @@
     "gulp-clean": "^0.4.0",
     "gulp-cssnano": "^2.1.2",
     "gulp-newer": "^1.4.0",
-    "gulp-sass": "^3.1.0",
+    "gulp-sass": "^4.1.0",
     "gulp-uglify": "^3.0.0",
     "gulp-watch": "^5.0.1",
     "webpack": "^4.2.0",

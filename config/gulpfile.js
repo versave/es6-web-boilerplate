@@ -1,3 +1,4 @@
+const fs = require('fs');
 const gulp = require('gulp');
 const sass = require('gulp-sass');
 const browserSync = require('browser-sync').create();
@@ -6,10 +7,12 @@ const autoprefixer = require('gulp-autoprefixer');
 const webpackStream = require('webpack-stream');
 const webpackConfig = require('./webpack.config.js');
 const uglify = require('gulp-uglify');
+const chokidar = require('chokidar');
 const paths = {
 	src: '../src',
 	build: '../build'
 };
+let sassFiles = 11;
 
 /**
 *	SASS Compiling
@@ -57,6 +60,33 @@ gulp.task('watch', () => {
 			directory: true
 		}
 	});
+
+	const watcher = chokidar.watch(`${paths.src}/scss/partials`, {ignoreInitial: true});
+	const styleScss = `${paths.src}/scss/style.scss`;
+
+	watcher
+		.on('add', (filePath) => {
+			const fileName = filePath.split('partials\\')[1];
+
+			fs.appendFile(styleScss, `\n@import './partials/${fileName}';`, function (err) {
+				err ? console.log(err) : console.log(`${fileName} added to style.scss`);
+			});
+		})
+		.on('unlink', (filePath) => {
+			try {
+				const fileName = filePath.split('partials\\')[1];
+
+				const data = fs.readFileSync(styleScss, 'utf-8');
+				const fileLine = `@import './partials/${fileName}';`;
+
+				const editedValue = data.replace(new RegExp(fileLine), '');
+				const newValue = editedValue.replace(/^\s*[\r\n]/gm, '');
+
+				fs.writeFileSync(styleScss, newValue, 'utf-8');
+			} catch(e) {
+				console.log(e)
+			}
+		})
 
 	gulp.watch(`${paths.src}/scss/**/*.scss`, gulp.series('sass', 'autoprefix'));
 	
